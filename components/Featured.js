@@ -52,7 +52,7 @@ export default function Featured({product}) {
           <Column>
             <div>
               <Title>{product?.title[0].toUpperCase().concat(product.title.slice(1, product.title.length))}</Title>
-              <Desc>{product.description}</Desc>
+              {/* <Desc>{product.description}</Desc> */}
               <Desc>
                 Officia culpa nulla qui sit fugiat eu voluptate.Officia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptate
               </Desc>
