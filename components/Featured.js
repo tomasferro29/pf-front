@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Center from './Center'
 import styled from 'styled-components'
 import Button from './Button';
 import ButtonLink from './ButtonLink';
 import CartIcon from './icons/CartIcon';
 import { primary } from '@/lib/colors';
+import { CartContext } from './CartContext';
 
 const Bg = styled.div`
   background-color: #222;
@@ -35,6 +36,12 @@ const ColumnsWrapper = styled.div`
 const Column = styled.div`
   display: flex;
   align-items: center;
+  img {
+    height: 100%;
+    width: 200px;
+    margin-left: 40px;
+    border-radius: 10px;
+  }
 `;
 
 const ButtonsWrapper = styled.div`
@@ -44,7 +51,14 @@ const ButtonsWrapper = styled.div`
 `;
 
 
+
 export default function Featured({product}) {
+
+  const {addProduct} = useContext(CartContext);
+
+  function addFeaturedToCart() {
+    addProduct(product._id);
+  }
   return (
     <Bg>
       <Center>
@@ -52,19 +66,19 @@ export default function Featured({product}) {
           <Column>
             <div>
               <Title>{product?.title[0].toUpperCase().concat(product.title.slice(1, product.title.length))}</Title>
-              {/* <Desc>{product.description}</Desc> */}
+              <Desc>{product.description}</Desc>
               <Desc>
                 Officia culpa nulla qui sit fugiat eu voluptate.Officia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptate
               </Desc>
               <ButtonsWrapper>
                 {/* <ButtonLink href={'/products/'+product._id} white outline>Read more</ButtonLink> */}
                 <ButtonLink href={'/products/'} white={1} outline={1}>Read more</ButtonLink>
-                <Button white><CartIcon/>Add to cart</Button>
+                <Button white onClick={addFeaturedToCart}><CartIcon/>Add to cart</Button>
               </ButtonsWrapper>
             </div>
           </Column>
           <Column>
-            <img src="https://http2.mlstatic.com/D_NQ_NP_909797-MLA47953574007_102021-O.jpg" alt="laptop"/>
+            <img src="https://cdn1.smartprix.com/rx-i2yXcPvGH-w1200-h1200/2yXcPvGH.jpg" alt="laptop"/>
           </Column>
         </ColumnsWrapper>
       </Center>
