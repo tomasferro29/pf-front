@@ -1,23 +1,20 @@
-// import { mongooseConnect } from "@/lib/mongoose";
+import { mongooseConnect } from "@/lib/mongoose";
+import { Product } from "@/models/Product";
 
-// export default async function handle(req, res) {
-//   await mongooseConnect();
-//   const {categories, sort, phrase, ...filters} = req.query;
-//   let [sortField, sortOrder] = (sort || '_id-desc').split('-')
+export default async function handle(req, res) {
+  await mongooseConnect();
+  const {categories, ...filters} = req.query;
+  const productsQuery = {
+    category:categories.split(','),
+  };
+  if (Object.keys(filters).length > 0) {
+    Object.keys(filters).forEach(filterName => {
+      productsQuery['properties.' + filterName] = filters[filterName]
+    })
+    // productsQuery.properties = filters;
+  }
+  console.log(productsQuery)
+  res.json( await Product.find(productsQuery));
+}
 
-//   const productsQuery = {};
-//   if ( categories) {
-//     productsQuery.category = categories.split(',');
-//   }
-//   if (phrase) {
-//     productsQuery['$or'] = [
-//       {title: {$regex: phrase, $options:'i'}},
-//       {description: {$regex:phrase, $options:'i'}},
-//     ];
-//   }
-//   if (Object.keys(filters).length > 0) {
-//     Object.keys(filters).forEach(filterName => {
-//       productsQuery['properties.'+filterName] = filters[filterName];
-//     });
-//   }
-// }
+ 
