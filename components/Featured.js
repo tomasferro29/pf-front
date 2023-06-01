@@ -95,13 +95,11 @@ export default function Featured({product}) {
                 </Title>
               </NavLink>
               <Desc>{product.description}</Desc>
-              <Desc>
-                Officia culpa nulla qui sit fugiat eu voluptate.Officia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptateOfficia culpa nulla qui sit fugiat eu voluptate
-              </Desc>
               <ButtonsWrapper>
                 {/* <ButtonLink href={'/products/'+product._id} white outline>Read more</ButtonLink> */}
                 <ButtonLink href={'/product/' + product._id} white={1} outline={1}>Read more</ButtonLink>
                 <Button white onClick={addFeaturedToCart}><CartIcon/>Add to cart</Button>
+                {/* FlyingButton white={1}*/}
               </ButtonsWrapper>
             </div>
           </Column>
