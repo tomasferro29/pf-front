@@ -119,20 +119,30 @@ export default function CartPage() {
     if(typeof window ==='undefined'){
       return;
     }
-    if (window.location.href.includes('success')){
+    if (window?.location.href.includes('success')){
       setIsSuccess(true);
       clearCart();
     }
   },[])
+
   let total = 0
   for (const productId of cartProducts) {
     const price = products.find(p => p._id === productId)?.price || 0;
     total += price;
-  }
+  };
+
+  const goToPayment= async () => {
+    const response= await axios.post('/api/checkout',{
+      name,email, city, postalCode, streetAdress, country,
+      cartProducts,
+    })
+    if(response.data.url){
+      window.location = response.data.url;
+    }
+  };
 
 
-
-  if (window.location.href.includes('success')) {
+  if (isSuccess) {
     return (
       <>
         <Header />
@@ -205,7 +215,7 @@ export default function CartPage() {
           {!!cartProducts.length && (
             <Box>
               <h2>Order Info</h2>
-              <form method='post' action='/api/checkout'>
+              {/* <form method='post' action='/api/checkout'> */}
                 <Input
                   type="text"
                   placeholder="Name"
@@ -244,12 +254,12 @@ export default function CartPage() {
                   value={country}
                   name='country'
                   onChange={ev => setCountry(ev.target.value)} />
-                <input
+                {/* <input
                   type='hidden'
                   name='products'
-                  value={cartProducts.join(',')} />
-                <Button black block type='submit'>Continue to payment</Button>
-              </form>
+                  value={cartProducts.join(',')} /> */}
+                <Button black block onClick={goToPayment}>Continue to payment</Button>
+              {/* </form> */}
             </Box>
           )}
         </ColumnsWrapper>
