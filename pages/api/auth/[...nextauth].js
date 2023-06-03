@@ -4,7 +4,7 @@ import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
 export const authOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.AUTH_FRONT_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_FRONT_ID,
