@@ -10,14 +10,19 @@ import { useEffect, useState } from "react";
 import Input from "@/components/Input";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
+import Tabs from "@/components/Tabs";
 
 
 const ColsWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1.2rf .8fr;
-  gap:40px;
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 40px;
   margin: 40px 0;
+  p{
+    margin:5px;
+  }
 `;
+
 const CityHolder = styled.div`
   display:flex;
   gap: 5px;
@@ -41,6 +46,8 @@ export default function AccountPage() {
   const [wishlistLoaded, setWishlistLoaded] = useState(true);
   const [orderLoaded, setOrderLoaded] = useState(true);
   const [wishedProducts, setWishedProducts] = useState([]);
+  const [activeTab, setActiveTab] = useState('Orders');
+  const [orders, setOrders] = useState([]);
 
   async function logout() {
     await signOut({
@@ -54,14 +61,20 @@ export default function AccountPage() {
   const saveAddress = () => {
     const data = { name, email, streetAddress, postalCode, country };
     axios.put('/api/address', data).then((response) => {
-      console.log(response)
+      // console.log(response)
     });
 
   }
 
+  const productRemovedFromWishlist=(idToRemove)=> {
+    setWishedProducts(products => {
+      return [...products.filter(p => p._id.toString() !== idToRemove)];
+    });
+  }
+
   useEffect(() => {
-    if(!session){
-      return; 
+    if (!session) {
+      return;
     }
     setAddressLoaded(false);
     setWishlistLoaded(false);
@@ -75,7 +88,15 @@ export default function AccountPage() {
       setCountry(response.data.country);
       setAddressLoaded(true);
     });
-  }, [])
+    axios.get('/api/wishlist').then(response => {
+      setWishedProducts(response.data.map(wp => wp.product));
+      setWishlistLoaded(true);
+    });
+    axios.get('/api/orders').then(response => {
+      setOrders(response.data);
+      setOrderLoaded(true);
+    });
+  }, [session]);
 
   return (
     <>
@@ -85,7 +106,54 @@ export default function AccountPage() {
           <div>
             <RevealWrapper delay={0}>
               <WhiteBox>
-                <h2>WishList</h2>
+                <Tabs
+                  tabs={['Orders', 'Wishlist']}
+                  active={activeTab}
+                  onChange={setActiveTab}
+                />
+                {activeTab === 'Orders' && (
+                  <>
+                    {!orderLoaded && (
+                      <Spinner fullWidth={true} />
+                    )}
+                    {orderLoaded && (
+                      <div>
+                        {orders.length === 0 && (
+                          <p>You have no orders</p>
+                        )}
+                        {orders.length > 0 && orders.map(o => (
+                          <SingleOrder {...o} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+                {activeTab === 'Wishlist' && (
+                  <>
+                    {!wishlistLoaded && (
+                      <Spinner fullWidth={true} />
+                    )}
+                    {wishlistLoaded && (
+                      <>
+                        <WishedProductsGrid>
+                          {wishedProducts.length > 0 && wishedProducts.map(wp => (
+                            <ProductBox key={wp._id} {...wp} wished={true} onRemoveFromWishlist={productRemovedFromWishlist} />
+                          ))}
+                        </WishedProductsGrid>
+                        {wishedProducts.length === 0 && (
+                          <>
+                            {session && (
+                              <p>Your wishlist is empty</p>
+                            )}
+                            {!session && (
+                              <p>Login to add products to your wishlist</p>
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
               </WhiteBox>
             </RevealWrapper>
           </div>
