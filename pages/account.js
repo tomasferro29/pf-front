@@ -158,7 +158,7 @@ export default function AccountPage() {
             </RevealWrapper>
           </div>
           <div>
-            <RevealWrapper delay={100}>
+            <RevealWrapper delay={150}>
               <WhiteBox>
                 <h2>{session ? 'Account details' : 'Login'}</h2>
                 {!addressLoaded && (

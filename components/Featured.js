@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
-import Center from './Center'
+import Center from './Center';
 import styled from 'styled-components'
-import Button from './Button';
 import ButtonLink from './ButtonLink';
 import CartIcon from './icons/CartIcon';
-import { primary } from '@/lib/colors';
-import { CartContext } from './CartContext';
 import Link from 'next/link';
+import FlyingButton from "@/components/FlyingButton";
+import {RevealWrapper} from  'next-reveal';
 
 const Bg = styled.div`
   background-color: #222;
@@ -32,8 +30,7 @@ const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1;
   gap: 40px;
-  
-  img{
+  img.main{
     max-width: 100%;
     max-height: 200px;
     display: block;
@@ -78,35 +75,37 @@ const NavLink = styled(Link)`
 
 export default function Featured({product}) {
 
-  const {addProduct} = useContext(CartContext);
-
-  function addFeaturedToCart() {
-    addProduct(product._id);
-  }
   return (
     <Bg>
       <Center>
-        <ColumnsWrapper>
+        <ColumnsWrapper >
           <Column>
             <div>
-              <NavLink href={'/product/' + product._id}>
+            <RevealWrapper origin='left' delay={0}>
+            <NavLink href={'/product/' + product._id}>
                 <Title>
-                  {product?.title[0].toUpperCase().concat(product.title.slice(1, product.title.length))}
+                  {product?.title}
                 </Title>
               </NavLink>
               <Desc>{product.description}</Desc>
               <ButtonsWrapper>
-                {/* <ButtonLink href={'/products/'+product._id} white outline>Read more</ButtonLink> */}
-                <ButtonLink href={'/product/' + product._id} white={1} outline={1}>Read more</ButtonLink>
-                <Button white onClick={addFeaturedToCart}><CartIcon/>Add to cart</Button>
-                {/* FlyingButton white={1}*/}
+                <ButtonLink href={'/product/' + product._id} white={1} outline={1}
+                  >Read more
+                </ButtonLink>
+                <FlyingButton white={1} _id={product._id} src={product.images?.[0]}>
+                  <CartIcon/>
+                  Add to cart
+                </FlyingButton>
               </ButtonsWrapper>
+            </RevealWrapper>
             </div>
           </Column>
           <Column>
-          <NavLink href={'/product/' + product._id}>
-            <img src={product.images[0]} alt="featured-product"/>
-          </NavLink>
+            <RevealWrapper delay={0}>
+              <NavLink href={'/product/' + product._id}>
+                <img className={'main'} src={product.images[0]} alt="featured-product"/>
+              </NavLink>
+            </RevealWrapper>
           </Column>
         </ColumnsWrapper>
       </Center>

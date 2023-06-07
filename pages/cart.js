@@ -301,6 +301,7 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Input from "@/components/Input";
+import { RevealList, RevealWrapper } from "next-reveal";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -418,7 +419,7 @@ export default function CartPage() {
       setIsSuccess(true);
       clearCart();
     }
-  },[])
+  }, [])
 
   let total = 0
   for (const productId of cartProducts) {
@@ -459,103 +460,107 @@ export default function CartPage() {
       <Header />
       <Center>
         <ColumnsWrapper>
-          <Box>
-            <h2>Cart</h2>
-            {!cartProducts?.length && (
-              <div>Your cart is empty</div>
-            )}
-            {products.length > 0 && (
-              <StyledTable>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map(product => (
-                    <tr key={product._id}>
-                      <ProductInfoCell>
-                        <ProductImageBox>
-                          <img src={product.images[0]} alt='imagen' />
-                        </ProductImageBox>
-                        {product.title}
-                      </ProductInfoCell>
-                      <td>
-                        <Button black outline
-                          onClick={() => lessOfThisProduct(product._id)}>
-                          -
-                        </Button>
-                        <QuantityLabel>
-                          {cartProducts.filter(id => id === product._id).length}
-                        </QuantityLabel>
-                        <Button black outline
-                          onClick={() => moreOfThisProduct(product._id)}>
-                          +
-                        </Button>
-                      </td>
-                      <td>${product.price * cartProducts.filter(id => id === product._id).length}</td>
-                    </tr>
-                  ))}
-                  <tr>
-                    <td>Total</td>
-                    <td></td>
-                    <td>$ {total}</td>
-                  </tr>
-                </tbody>
-              </StyledTable>
-            )}
-          </Box>
-          {!!cartProducts.length && (
+          <RevealWrapper delay={0}>
             <Box>
-              <h2>Order Info</h2>
-              {/* <form method='post' action='/api/checkout'> */}
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  value={name}
-                  name='name'
-                  onChange={ev => setName(ev.target.value)} />
-                <Input
-                  type="text"
-                  placeholder="Email"
-                  value={email}
-                  name='email'
-                  onChange={ev => setEmail(ev.target.value)} />
-                <CityHolder>
-                  <Input
-                    type="text"
-                    placeholder="City"
-                    value={city}
-                    name='city'
-                    onChange={ev => setCity(ev.target.value)} />
-                  <Input
-                    type="text"
-                    placeholder="Postal Code"
-                    value={postalCode}
-                    name='postalCode'
-                    onChange={ev => setPostalCode(ev.target.value)} />
-                </CityHolder>
-                <Input
-                  type="text"
-                  placeholder="Street Adress"
-                  value={streetAdress}
-                  name='streetAdress'
-                  onChange={ev => setStreetAdress(ev.target.value)} />
-                <Input
-                  type="text"
-                  placeholder="Country"
-                  value={country}
-                  name='country'
-                  onChange={ev => setCountry(ev.target.value)} />
-                {/* <input
-                  type='hidden'
-                  name='products'
-                  value={cartProducts.join(',')} /> */}
-                <Button black block onClick={goToPayment}>Continue to payment</Button>
-              {/* </form> */}
+              <h2>Cart</h2>
+              {!cartProducts?.length && (
+                <div>Your cart is empty</div>
+              )}
+              {products.length > 0 && (
+                <StyledTable>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map(product => (
+                      <tr key={product._id}>
+                        <ProductInfoCell>
+                          <ProductImageBox>
+                            <img src={product.images[0]} alt='imagen' />
+                          </ProductImageBox>
+                          {product.title}
+                        </ProductInfoCell>
+                        <td>
+                          <Button black outline
+                            onClick={() => lessOfThisProduct(product._id)}>
+                            -
+                          </Button>
+                          <QuantityLabel>
+                            {cartProducts.filter(id => id === product._id).length}
+                          </QuantityLabel>
+                          <Button black outline
+                            onClick={() => moreOfThisProduct(product._id)}>
+                            +
+                          </Button>
+                        </td>
+                        <td>${product.price * cartProducts.filter(id => id === product._id).length}</td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td>Total</td>
+                      <td></td>
+                      <td>$ {total}</td>
+                    </tr>
+                  </tbody>
+                </StyledTable>
+              )}
             </Box>
+          </RevealWrapper>
+          {!!cartProducts.length && (
+            <RevealWrapper delay={150}>
+              <Box>
+                <h2>Order Info</h2>
+                {/* <form method='post' action='/api/checkout'> */}
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    name='name'
+                    onChange={ev => setName(ev.target.value)} />
+                  <Input
+                    type="text"
+                    placeholder="Email"
+                    value={email}
+                    name='email'
+                    onChange={ev => setEmail(ev.target.value)} />
+                  <CityHolder>
+                    <Input
+                      type="text"
+                      placeholder="City"
+                      value={city}
+                      name='city'
+                      onChange={ev => setCity(ev.target.value)} />
+                    <Input
+                      type="text"
+                      placeholder="Postal Code"
+                      value={postalCode}
+                      name='postalCode'
+                      onChange={ev => setPostalCode(ev.target.value)} />
+                  </CityHolder>
+                  <Input
+                    type="text"
+                    placeholder="Street Adress"
+                    value={streetAdress}
+                    name='streetAdress'
+                    onChange={ev => setStreetAdress(ev.target.value)} />
+                  <Input
+                    type="text"
+                    placeholder="Country"
+                    value={country}
+                    name='country'
+                    onChange={ev => setCountry(ev.target.value)} />
+                  {/* <input
+                    type='hidden'
+                    name='products'
+                    value={cartProducts.join(',')} /> */}
+                  <Button black block onClick={goToPayment}>Continue to payment</Button>
+                {/* </form> */}
+              </Box>
+            </RevealWrapper>
           )}
         </ColumnsWrapper>
       </Center>

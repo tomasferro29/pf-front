@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import ProductBox from "@/components/ProductBox";
+import { RevealWrapper } from "next-reveal";
 
 const StyledProductsGrid = styled.div`
     display: grid;
@@ -12,10 +13,12 @@ const StyledProductsGrid = styled.div`
 
 const ProductsGrid = ({products}) => {
   return (
-    <StyledProductsGrid>
-        {products?.length > 0 && products.map((product) =>(
-            <ProductBox key={product._id} {...product} />
-        ))}
+    <StyledProductsGrid interval={100} >
+      {products?.length > 0 && products.map((product, index) =>(
+        <RevealWrapper delay={index * 50} key={product._id}>
+          <ProductBox {...product} />
+        </RevealWrapper>
+      ))}
     </StyledProductsGrid>
   );
 }
