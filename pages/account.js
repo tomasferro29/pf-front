@@ -11,6 +11,7 @@ import Input from "@/components/Input";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import Tabs from "@/components/Tabs";
+import SingleOrder from "@/components/SingleOrder";
 
 
 const ColsWrapper = styled.div`
@@ -48,6 +49,7 @@ export default function AccountPage() {
   const [wishedProducts, setWishedProducts] = useState([]);
   const [activeTab, setActiveTab] = useState('Orders');
   const [orders, setOrders] = useState([]);
+
 
   async function logout() {
     await signOut({
