@@ -68,7 +68,7 @@ export default function AccountPage() {
 
   }
 
-  const productRemovedFromWishlist=(idToRemove)=> {
+  const productRemovedFromWishlist = (idToRemove) => {
     setWishedProducts(products => {
       return [...products.filter(p => p._id.toString() !== idToRemove)];
     });
@@ -76,8 +76,11 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!session) {
+      setAddressLoaded(false);
+      setWishlistLoaded(false);
+      setOrderLoaded(false);
       return;
-    }
+    }else{
     setAddressLoaded(false);
     setWishlistLoaded(false);
     setOrderLoaded(false);
@@ -97,7 +100,7 @@ export default function AccountPage() {
     axios.get('/api/orders').then(response => {
       setOrders(response.data);
       setOrderLoaded(true);
-    });
+    });}
   }, [session]);
 
   return (
