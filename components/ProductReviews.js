@@ -77,6 +77,10 @@ const ProductReviews = ({ product }) => {
             setReviews(res.data);
             setReviewsLoading(false);
         });
+        axios.get('/api/tools/orderbyproducts?user='+
+        '7200ws@gmail.com'+'&product='+product._id).then(res => {
+            console.log(res);
+        });
     }
     return (
         <div>
