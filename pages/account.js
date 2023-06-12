@@ -11,6 +11,8 @@ import Input from "@/components/Input";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import Tabs from "@/components/Tabs";
+import SingleOrder from "@/components/SingleOrder";
+// const nodemailer = require("nodemailer");
 
 
 const ColsWrapper = styled.div`
@@ -49,6 +51,7 @@ export default function AccountPage() {
   const [activeTab, setActiveTab] = useState('Orders');
   const [orders, setOrders] = useState([]);
 
+
   async function logout() {
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_URL,
@@ -58,6 +61,30 @@ export default function AccountPage() {
     await signIn('google')
   }
 
+  // async function welcome() {
+  //   let testAccount = await nodemailer.createTestAccount();
+  //   console.log(testAccount)
+    // let transporter = nodemailer.createTransport({
+    //   host: "smtp.ethereal.email",
+    //   port: 587,
+    //   secure: false, // true for 465, false for other ports
+    //   auth: {
+    //     user: testAccount.user, // generated ethereal user
+    //     pass: testAccount.pass, // generated ethereal password
+    //   },
+    // });
+    
+    // let info = await transporter.sendMail({
+    //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    //   to: "bar@example.com, baz@example.com", // list of receivers
+    //   subject: "Hello ✔", // Subject line
+    //   text: "Hello world?", // plain text body
+    //   html: "<b>Hello world?</b>", // html body
+    // });
+    // console.log("Message sent: %s", info.messageId);
+  // }
+  // welcome().catch(console.error);
+
   const saveAddress = () => {
     const data = { name, email, streetAddress, postalCode, country };
     axios.put('/api/address', data).then((response) => {
@@ -66,7 +93,7 @@ export default function AccountPage() {
 
   }
 
-  const productRemovedFromWishlist=(idToRemove)=> {
+  const productRemovedFromWishlist = (idToRemove) => {
     setWishedProducts(products => {
       return [...products.filter(p => p._id.toString() !== idToRemove)];
     });
@@ -74,8 +101,11 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!session) {
+      setAddressLoaded(false);
+      setWishlistLoaded(false);
+      setOrderLoaded(false);
       return;
-    }
+    }else{
     setAddressLoaded(false);
     setWishlistLoaded(false);
     setOrderLoaded(false);
@@ -95,7 +125,8 @@ export default function AccountPage() {
     axios.get('/api/orders').then(response => {
       setOrders(response.data);
       setOrderLoaded(true);
-    });
+    });}
+    console.log('AHORA VA EL MAIL');
   }, [session]);
 
   return (

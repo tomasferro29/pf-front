@@ -2,7 +2,7 @@ import styled from "styled-components"
 import Button, { ButtonStyle } from "./Button";
 import CartIcon from "./icons/CartIcon";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
 import { primary } from "@/lib/colors";
 import FlyingButton from '@/components/FlyingButton'
@@ -63,8 +63,21 @@ const Price = styled.div`
 
 
 export default function ProductBox({_id, title, images, description, price}) {
-  
+  const {addProduct} = useContext(CartContext)
+  const [added, setAdded] = useState(false)
+  const [text, setText] = useState('Add to cart')
   const url = '/product/' + _id;
+
+  function showAdded() {
+    setAdded(true)
+  }
+
+  useEffect(() => {
+    added ? setText('Added to your cart !!') : setText('Add to cart')
+    setTimeout(() => {
+      setAdded(false)
+    }, 2000)
+  }, [added])
   
   return (
     <ProductWrapper>
@@ -75,7 +88,7 @@ export default function ProductBox({_id, title, images, description, price}) {
         <Title href={url}>{title[0].toUpperCase().concat(title.slice(1, title.length))}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <FlyingButton _id={_id} src={images?.[0]}>Add to cart</FlyingButton>
+          <Button onClick={() => {addProduct(_id), showAdded()}}>{text}</Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

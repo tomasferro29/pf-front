@@ -5,6 +5,9 @@ import CartIcon from './icons/CartIcon';
 import Link from 'next/link';
 import FlyingButton from "@/components/FlyingButton";
 import {RevealWrapper} from  'next-reveal';
+import Button from './Button';
+import { useContext, useEffect, useState } from 'react';
+import { CartContext } from './CartContext';
 
 const Bg = styled.div`
   background-color: #222;
@@ -74,6 +77,20 @@ const NavLink = styled(Link)`
 `;
 
 export default function Featured({product}) {
+  const {addProduct} = useContext(CartContext)
+  const [added, setAdded] = useState(false)
+  const [text, setText] = useState('Add to cart')
+
+  function showAdded() {
+    setAdded(true)
+  }
+
+  useEffect(() => {
+    added ? setText('Added to your cart !!') : setText('Add to cart')
+    setTimeout(() => {
+      setAdded(false)
+    }, 3000)
+  }, [added])
 
   return (
     <Bg>
@@ -92,10 +109,10 @@ export default function Featured({product}) {
                 <ButtonLink href={'/product/' + product._id} white={1} outline={1}
                   >Read more
                 </ButtonLink>
-                <FlyingButton white={1} _id={product._id} src={product.images?.[0]}>
+                <Button white={1} onClick={() => {addProduct(product._id), showAdded()}}>
                   <CartIcon/>
-                  Add to cart
-                </FlyingButton>
+                  {text}
+                </Button>
               </ButtonsWrapper>
             </RevealWrapper>
             </div>

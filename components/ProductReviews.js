@@ -7,6 +7,7 @@ import axios from "axios";
 import Spinner from "@/components/Spinner";
 import { useEffect, useState } from "react";
 import WhiteBox from "@/components/WhiteBox";
+import { useSession } from "next-auth/react";
 
 const Title = styled.h2`
   font-size:1.2rem;
@@ -55,12 +56,14 @@ const ReviewHeader = styled.div`
 
 const ProductReviews = ({ product }) => {
     const [title, setTitle] = useState('');
+    const {data: session } = useSession();
     const [description, setDescription] = useState('');
     const [stars, setStars] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [reviewsLoading, setReviewsLoading] = useState(false);
+    const [isReviewer, setIsReviewer] = useState(false);
     const submitReview = () => {
-        const data = { title, description, stars, product: product._id };
+        const data = { title, description, stars, product: product._id, user: session.user };
         axios.post('/api/reviews', data).then(res => {
             setTitle('');
             setDescription('');
@@ -77,12 +80,19 @@ const ProductReviews = ({ product }) => {
             setReviews(res.data);
             setReviewsLoading(false);
         });
+        axios.get('/api/tools/orderbyproducts?user='+
+        session?.user?.email+'&product='+product._id).then(res => {
+            // console.log(session);
+            if(res.data.length>0){
+                setIsReviewer(true);
+            }
+        });
     }
     return (
         <div>
             <Title>Reviews</Title>
             <ColsWrapper >
-                <div>
+                {isReviewer && (<div>
                     <WhiteBox>
                         <Subtitle>Add a review</Subtitle>
                         <div>
@@ -100,7 +110,7 @@ const ProductReviews = ({ product }) => {
                             <Button primary onClick={submitReview}>Submit your review</Button>
                         </div>
                     </WhiteBox>
-                </div>
+                </div>)}
                 <div>
                     <WhiteBox>
                         <Subtitle>All reviews</Subtitle>
@@ -114,10 +124,12 @@ const ProductReviews = ({ product }) => {
                             <ReviewWrapper>
                                 <ReviewHeader>
                                     <StarsRating size={'sm'} disabled={true} defaultHowMany={review.stars} />
-                                    <time>{(new Date(review.createdAt)).toLocaleString('sv-SE')}</time>
+                                    
+                                    <time><span><i >{review.user.name}</i></span> {(new Date(review.createdAt)).toLocaleString('sv-SE')}</time>
                                 </ReviewHeader>
                                 <h3>{review.title}</h3>
                                 <p>{review.description}</p>
+                                <p></p>
                             </ReviewWrapper>
                         ))}
                     </WhiteBox>
