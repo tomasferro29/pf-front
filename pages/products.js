@@ -11,7 +11,7 @@ const Title = styled.h1`
 
 
 const ProductPage = ({products}) => {
-    console.log({products});
+    
   return (
     <>
     <Header />
@@ -28,7 +28,6 @@ export default ProductPage;
 export async function getServerSideProps(){
     await mongooseConnect();
     const products = await Product.find({}, null, {sort: {'_id': -1}});
-    console.log({products});
     return {props:{
         products: JSON.parse(JSON.stringify(products)),
     }};

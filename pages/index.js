@@ -16,7 +16,7 @@ export default function HomePage({featuredProduct, newProducts}){
 }
 
 export async function getServerSideProps() {
-  const featuredProductId = '6469507069983d61c3b776a4';
+  const featuredProductId = '6469570869983d61c3b776fd';
   await mongooseConnect()
   const featuredProduct = await Product.findById(featuredProductId)
   const newProducts = await Product.find({}, null, {sort: {'_id': -1}, limit: 10})
