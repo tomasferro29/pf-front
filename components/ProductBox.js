@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
 import { primary } from "@/lib/colors";
-import FlyingButton from '@/components/FlyingButton'
+// import FlyingButton from '@/components/FlyingButton'
 
 const ProductWrapper = styled.div`
 

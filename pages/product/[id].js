@@ -10,7 +10,7 @@ import Button from "@/components/Button";
 import CartIcon from "@/components/icons/CartIcon";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
-import FlyingButton from "@/components/FlyingButton";
+// import FlyingButton from "@/components/FlyingButton";
 import ProductReviews from "@/components/ProductReviews";
 
 const ColWrapper = styled.div`

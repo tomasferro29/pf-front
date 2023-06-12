@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import ButtonLink from './ButtonLink';
 import CartIcon from './icons/CartIcon';
 import Link from 'next/link';
-import FlyingButton from "@/components/FlyingButton";
+// import FlyingButton from "@/components/FlyingButton";
 import {RevealWrapper} from  'next-reveal';
 import Button from './Button';
 import { useContext, useEffect, useState } from 'react';
