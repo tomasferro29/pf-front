@@ -6,7 +6,7 @@ const handle = async (req,res) => {
     await mongooseConnect();
 
     const {user, product} = req.query;
-    const orderPaid = {paid: false};
+    const orderPaid = {paid: true};
     const productId = new ObjectId(product);
 
     // console.log (product);
