@@ -15,7 +15,7 @@ export default function App({ Component, pageProps: {session, ...pageProps} }) {
   return (
     <>
       <GlobalStyles/>
-      <SessionProvider>
+      <SessionProvider session={session}>
         <CartContextProvider>
           <Component {...pageProps} />
         </CartContextProvider>
@@ -23,3 +23,9 @@ export default function App({ Component, pageProps: {session, ...pageProps} }) {
     </>
   )
 }
+
+
+  // "devDependencies": {
+  //   "babel-plugin-styled-components": "^2.1.3"
+  // }
+    // "extends": ["next/babel"]
