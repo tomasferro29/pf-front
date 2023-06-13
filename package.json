@@ -27,5 +27,8 @@
     "stripe": "^12.8.0",
     "styled-components": "^5.0.0",
     "tailwind": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^2.1.3"
   }
 }
