@@ -102,6 +102,21 @@ export default function AccountPage() {
       setOrderLoaded(true);
     });}
   }, [session]);
+  if(!session){
+    return (<>
+      <Header />
+      <Center>
+      <ColsWrapper>
+        <div>
+          <WhiteBox>
+            <h3>You have to be logged in   </h3>
+            <Button primary onClick={login}>Login</Button>
+          </WhiteBox>
+        </div>
+      </ColsWrapper>
+      </Center>
+    </>)
+  }
 
   return (
     <>
@@ -150,9 +165,7 @@ export default function AccountPage() {
                             {session && (
                               <p>Your wishlist is empty</p>
                             )}
-                            {!session && (
-                              <p>Login to add products to your wishlist</p>
-                            )}
+                            
                           </>
                         )}
                       </>

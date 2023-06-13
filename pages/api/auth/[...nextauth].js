@@ -12,6 +12,9 @@ export const authOptions = {
     }),
   ],
   adapater: MongoDBAdapter(clientPromise),
+  callbacks: {
+    
+  }
 };
 
 export default NextAuth(authOptions);
