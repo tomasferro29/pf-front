@@ -153,8 +153,8 @@ export default function AccountPage() {
                         {orders.length === 0 && (
                           <p>You have no orders</p>
                         )}
-                        {orders.length > 0 && orders.map(o => (
-                          <SingleOrder {...o} />
+                        {orders.length > 0 && orders.map((o, i) => (
+                          <SingleOrder key={i} {...o} />
                         ))}
                       </div>
                     )}
