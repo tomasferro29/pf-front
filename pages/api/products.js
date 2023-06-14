@@ -6,6 +6,7 @@ export default async function handle(req, res) {
   const {categories, sort, phrase, ...filters} = req.query;
   let [sortField, sortOrder] = ( sort || '_id-desc').split('-');
   const productsQuery = {}
+  productsQuery.stock = { $gt: 0 }
   if (categories) {
     productsQuery.category = categories.split(',')
   };
@@ -20,6 +21,7 @@ export default async function handle(req, res) {
       productsQuery['properties.' + filterName] = filters[filterName]
     })
   }
+  console.log(productsQuery);
   res.json( await Product.find(
     productsQuery, 
     null, 

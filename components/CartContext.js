@@ -12,7 +12,7 @@ export function CartContextProvider({children}) {
       ls?.setItem('cart', JSON.stringify(cartProducts));
     }
   }, [
-    ls,
+    // ls,
     // PROBLEM: NO INCLUIR ls COMO DEPENDENCIA PUEDE AFECTAR EL DESARROLLO
     cartProducts]);
 
@@ -21,12 +21,30 @@ export function CartContextProvider({children}) {
       setCartProducts(JSON.parse(ls.getItem('cart')))
     }
   }, [
-    ls
+    // ls
     // PROBLEM: NO INCLUIR ls COMO DEPENDENCIA PUEDE AFECTAR EL DESARROLLO
   ])
+
+  const countEl =(array, el)=>{
+    let count = 0;
+    for (let i = 0; i < array.length; i++){
+      if(array[i]==el){
+        count++;
+      }
+    }
+    return count;
+  }
    
-  function addProduct(productId) {
-    setCartProducts(prev => [...prev, productId])
+  function addProduct(productId, stock) {
+    setCartProducts(prev => {
+      var pos =countEl(prev, productId);
+      console.log(stock);
+      if((pos+1)>stock){
+        alert("there isn't enough stock");
+        return prev
+      }
+      return [...prev, productId]
+    })
   };
 
   function removeProduct(productId) {
