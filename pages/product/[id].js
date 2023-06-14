@@ -64,7 +64,7 @@ export default  function ProductPage({product}) {
             <PriceRow>
               <Price>${product.price}</Price>
               <div>
-                <Button main onClick={() => {addProduct(product._id), showAdded()}}>
+                <Button main onClick={() => {addProduct(product._id, product.stock), showAdded()}}>
                   <CartIcon />{text}
                 </Button>
               </div>

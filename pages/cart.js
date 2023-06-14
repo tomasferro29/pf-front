@@ -390,8 +390,8 @@ export default function CartPage() {
   const [isSuccess,setIsSuccess] = useState(false);
   const [shippingFee, setShippingFee] = useState(null);
 
-  function moreOfThisProduct(id) {
-    addProduct(id);
+  function moreOfThisProduct(id, stock) {
+    addProduct(id,stock);
   };
 
   function lessOfThisProduct(id) {
@@ -493,7 +493,7 @@ export default function CartPage() {
                             {cartProducts.filter(id => id === product._id).length}
                           </QuantityLabel>
                           <Button black outline
-                            onClick={() => moreOfThisProduct(product._id)}>
+                            onClick={() => moreOfThisProduct(product._id, product.stock)}>
                             +
                           </Button>
                         </td>

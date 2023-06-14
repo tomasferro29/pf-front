@@ -109,7 +109,7 @@ export default function Featured({product}) {
                 <ButtonLink href={'/product/' + product._id} white={1} outline={1}
                   >Read more
                 </ButtonLink>
-                <Button white={1} onClick={() => {addProduct(product._id), showAdded()}}>
+                <Button white={1} onClick={() => {addProduct(product._id, product.stock), showAdded()}}>
                   <CartIcon/>
                   {text}
                 </Button>

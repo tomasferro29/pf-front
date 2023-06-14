@@ -13,7 +13,6 @@ import Spinner from "@/components/Spinner";
 import Tabs from "@/components/Tabs";
 import SingleOrder from "@/components/SingleOrder";
 import ProductBox from "@/components/ProductBox";
-// const nodemailer = require("nodemailer");
 
 
 const ColsWrapper = styled.div`
@@ -129,6 +128,21 @@ export default function AccountPage() {
     });}
     console.log('AHORA VA EL MAIL');
   }, [session]);
+  if(!session){
+    return (<>
+      <Header />
+      <Center>
+      <ColsWrapper>
+        <div>
+          <WhiteBox>
+            <h3>You have to be logged in   </h3>
+            <Button primary onClick={login}>Login</Button>
+          </WhiteBox>
+        </div>
+      </ColsWrapper>
+      </Center>
+    </>)
+  }
 
   return (
     <>
@@ -153,7 +167,7 @@ export default function AccountPage() {
                         {orders.length === 0 && (
                           <p>You have no orders</p>
                         )}
-                        {orders.length > 0 && orders.map((o, i) => (
+                        {orders.length > 0 && orders.map((o,i) => (
                           <SingleOrder key={i} {...o} />
                         ))}
                       </div>
@@ -177,9 +191,7 @@ export default function AccountPage() {
                             {session && (
                               <p>Your wishlist is empty</p>
                             )}
-                            {!session && (
-                              <p>Login to add products to your wishlist</p>
-                            )}
+                            
                           </>
                         )}
                       </>
