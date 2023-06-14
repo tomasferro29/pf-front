@@ -13,6 +13,7 @@ import Spinner from "@/components/Spinner";
 import Tabs from "@/components/Tabs";
 import SingleOrder from "@/components/SingleOrder";
 import ProductBox from "@/components/ProductBox";
+import CheckIcon from "@/components/icons/CheckIcon";
 
 
 const ColsWrapper = styled.div`
@@ -50,6 +51,9 @@ export default function AccountPage() {
   const [wishedProducts, setWishedProducts] = useState([]);
   const [activeTab, setActiveTab] = useState('Orders');
   const [orders, setOrders] = useState([]);
+  const [saved, setSaved] = useState(false)
+  const [submitText, setSubmitText] = useState('Save')
+  const [submitIcon, setSubmitIcon] = useState(null)
 
 
   async function logout() {
@@ -86,9 +90,11 @@ export default function AccountPage() {
   // welcome().catch(console.error);
 
   const saveAddress = () => {
-    const data = { name, email, streetAddress, postalCode, country };
+    const data = { name, email, city, streetAddress, postalCode, country };
     axios.put('/api/address', data).then((response) => {
-      // console.log(response)
+      setSaved(true)
+      setSubmitText('Information saved')
+      setSubmitIcon(<CheckIcon/>)
     });
 
   }
@@ -135,7 +141,7 @@ export default function AccountPage() {
       <ColsWrapper>
         <div>
           <WhiteBox>
-            <h3>You have to be logged in   </h3>
+            <h3>Log in to see your account!</h3>
             <Button primary onClick={login}>Login</Button>
           </WhiteBox>
         </div>
@@ -244,7 +250,7 @@ export default function AccountPage() {
                       onChange={ev => setCountry(ev.target.value)} />
                     <Button black block
                       onClick={saveAddress}>
-                      save
+                      {submitText}{saved && <hr/>}{submitIcon}
                     </Button>
                     <hr />
                   </>

@@ -29,7 +29,6 @@ export default async function handler(req,res) {
           paid:true,
         })
       }
-      console.log('hola tomas, esta es la data : ' + data);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
