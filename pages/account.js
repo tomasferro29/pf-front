@@ -12,6 +12,7 @@ import axios from "axios";
 import Spinner from "@/components/Spinner";
 import Tabs from "@/components/Tabs";
 import SingleOrder from "@/components/SingleOrder";
+import ProductBox from "@/components/ProductBox";
 
 
 const ColsWrapper = styled.div`
@@ -141,8 +142,8 @@ export default function AccountPage() {
                         {orders.length === 0 && (
                           <p>You have no orders</p>
                         )}
-                        {orders.length > 0 && orders.map(o => (
-                          <SingleOrder {...o} />
+                        {orders.length > 0 && orders.map((o,i) => (
+                          <SingleOrder key={i} {...o} />
                         ))}
                       </div>
                     )}
