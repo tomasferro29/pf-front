@@ -8,9 +8,9 @@ import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
 import Button from "@/components/Button";
 import CartIcon from "@/components/icons/CartIcon";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
-import FlyingButton from "@/components/FlyingButton";
+// import FlyingButton from "@/components/FlyingButton";
 import ProductReviews from "@/components/ProductReviews";
 
 const ColWrapper = styled.div`
@@ -36,7 +36,20 @@ const Price = styled.span`
 export default  function ProductPage({product}) {
 
   const {addProduct} = useContext(CartContext);
+  const [added, setAdded] = useState(false)
+  const [text, setText] = useState('Add to cart')
 
+  function showAdded() {
+    setAdded(true)
+  }
+
+  useEffect(() => {
+    added ? setText('Added to your cart !!') : setText('Add to cart')
+    setTimeout(() => {
+      setAdded(false)
+    }, 3000)
+  }, [added]);
+  
   return(
     <>
       <Header/>
@@ -51,9 +64,9 @@ export default  function ProductPage({product}) {
             <PriceRow>
               <Price>${product.price}</Price>
               <div>
-                <FlyingButton main _id={product._id} src={product.images?.[0]}>
-                  <CartIcon />Add to cart
-                </FlyingButton>
+                <Button main onClick={() => {addProduct(product._id), showAdded()}}>
+                  <CartIcon />{text}
+                </Button>
               </div>
             </PriceRow>
           </div>

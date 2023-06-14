@@ -5,6 +5,7 @@ import { useContext, useState } from 'react';
 import { CartContext } from './CartContext';
 import SearchIcon from './icons/SearchIcon';
 import BarsIcon from './icons/Bars';
+import NotificationIcon from './icons/notifIcon';
 
 const StyledHeader = styled.header`
   background-color: #222;
@@ -85,6 +86,7 @@ const SideIcons = styled.div`
     svg{
       width: 14px;
       height: 14px;
+      margin: 0 20px;
     }
   }
 
@@ -107,6 +109,7 @@ export default function Header(){
           </StyledNav>
           <SideIcons>
             <Link href={'/search'}><SearchIcon/></Link>
+            <Link href={'/notifications'}><NotificationIcon/></Link>
             <NavButton onClick={() => {setMobileNavActive(prev => !prev), console.log('movile: ', mobileNavActive)}}>
               <BarsIcon />
             </NavButton>

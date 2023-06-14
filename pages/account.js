@@ -61,6 +61,30 @@ export default function AccountPage() {
     await signIn('google')
   }
 
+  // async function welcome() {
+  //   let testAccount = await nodemailer.createTestAccount();
+  //   console.log(testAccount)
+    // let transporter = nodemailer.createTransport({
+    //   host: "smtp.ethereal.email",
+    //   port: 587,
+    //   secure: false, // true for 465, false for other ports
+    //   auth: {
+    //     user: testAccount.user, // generated ethereal user
+    //     pass: testAccount.pass, // generated ethereal password
+    //   },
+    // });
+    
+    // let info = await transporter.sendMail({
+    //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    //   to: "bar@example.com, baz@example.com", // list of receivers
+    //   subject: "Hello ✔", // Subject line
+    //   text: "Hello world?", // plain text body
+    //   html: "<b>Hello world?</b>", // html body
+    // });
+    // console.log("Message sent: %s", info.messageId);
+  // }
+  // welcome().catch(console.error);
+
   const saveAddress = () => {
     const data = { name, email, streetAddress, postalCode, country };
     axios.put('/api/address', data).then((response) => {
@@ -102,6 +126,7 @@ export default function AccountPage() {
       setOrders(response.data);
       setOrderLoaded(true);
     });}
+    console.log('AHORA VA EL MAIL');
   }, [session]);
   if(!session){
     return (<>
