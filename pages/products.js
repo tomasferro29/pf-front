@@ -11,7 +11,7 @@ const Title = styled.h1`
 
 
 const ProductPage = ({products}) => {
-    
+    // console.log(products)
   return (
     <>
     <Header />

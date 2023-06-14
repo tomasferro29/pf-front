@@ -62,11 +62,12 @@ const Price = styled.div`
 `;
 
 
-export default function ProductBox({_id, title, images, description, price}) {
+export default function ProductBox({_id, title, images, description, price, stock}) {
   const {addProduct} = useContext(CartContext)
   const [added, setAdded] = useState(false)
   const [text, setText] = useState('Add to cart')
   const url = '/product/' + _id;
+  console.log(stock );
 
   function showAdded() {
     setAdded(true)
@@ -88,7 +89,7 @@ export default function ProductBox({_id, title, images, description, price}) {
         <Title href={url}>{title[0].toUpperCase().concat(title.slice(1, title.length))}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <Button onClick={() => {addProduct(_id), showAdded()}}>{text}</Button>
+          <Button onClick={() => {addProduct(_id,stock), showAdded()}}>{text}</Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>
