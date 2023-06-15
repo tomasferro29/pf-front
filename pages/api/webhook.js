@@ -3,7 +3,7 @@ import { Order } from "@/models/Order";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 import { buffer } from 'micro';
 
-const endpointSecret = "whsec_b92c01d3bb8f5867b5083afb637d66e38718b276f64760afcb3b4ba065a89bab";
+const endpointSecret = "whsec_b26f4be4d9f8b89cdf0ede2b87bc783b22c34701096b88b99ece8d04f9b96c4b";
 
 export default async function handler(req,res) {
   await mongooseConnect();
@@ -27,7 +27,8 @@ export default async function handler(req,res) {
       if (orderId && paid) {
         await Order.findByIdAndUpdate(orderId, {
           paid:true,
-        })
+        });
+        console.log(data.metadata)
       }
       console.log('hola tomas, esta es la data : ' + data);
       break;
