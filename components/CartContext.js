@@ -12,7 +12,7 @@ export function CartContextProvider({children}) {
       ls?.setItem('cart', JSON.stringify(cartProducts));
     }
   }, [
-    ls,
+    // ls,
     // PROBLEM: NO INCLUIR ls COMO DEPENDENCIA PUEDE AFECTAR EL DESARROLLO
     cartProducts]);
 
@@ -21,7 +21,7 @@ export function CartContextProvider({children}) {
       setCartProducts(JSON.parse(ls.getItem('cart')))
     }
   }, [
-    ls
+    // ls
     // PROBLEM: NO INCLUIR ls COMO DEPENDENCIA PUEDE AFECTAR EL DESARROLLO
   ])
 
