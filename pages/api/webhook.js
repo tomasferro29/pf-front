@@ -1,11 +1,13 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
+import { Product } from "@/models/Product";
+import axios from "axios";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 import { buffer } from 'micro';
 
-const endpointSecret = "whsec_b92c01d3bb8f5867b5083afb637d66e38718b276f64760afcb3b4ba065a89bab";
+const endpointSecret = process.env.ENPOINT_SECRET
 
-export default async function handler(req,res) {
+export default async function handler(req, res) {
   await mongooseConnect();
   const sig = req.headers['stripe-signature'];
 
@@ -26,9 +28,30 @@ export default async function handler(req,res) {
       const paid = data.payment_status === 'paid';
       if (orderId && paid) {
         await Order.findByIdAndUpdate(orderId, {
-          paid:true,
-        })
+          paid: true,
+        });
+        // console.log(data.metadata)
+        const order = await Order.findById(orderId);
+        order.line_items.forEach(async (li) => {
+          // console.log(li)
+            const quantity= li.quantity;
+            const productId= li.price_data.product_data.productId;
+            const product = await Product.findById(productId);
+            // console.log(product)  
+            const nstock =product.stock-quantity
+            if(nstock<0){
+              //sent message 
+            }else{
+            await Product.findByIdAndUpdate(productId, {
+                stock: nstock
+            }).catch(err=>{
+              console.log(err)
+            })
+          }
+        });
       }
+      //sent message
+
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
@@ -39,7 +62,7 @@ export default async function handler(req,res) {
 }
 
 export const config = {
-  api: {bodyParser:false,}
+  api: { bodyParser: false, }
 }
 
 // poise-loves-lush-steady

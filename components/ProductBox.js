@@ -67,7 +67,7 @@ export default function ProductBox({_id, title, images, description, price, stoc
   const [added, setAdded] = useState(false)
   const [text, setText] = useState('Add to cart')
   const url = '/product/' + _id;
-  console.log(stock );
+  // console.log(stock );
 
   function showAdded() {
     setAdded(true)

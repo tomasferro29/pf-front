@@ -140,12 +140,12 @@ export default function CartPage() {
       return;
     }
     axios.get('/api/address').then(response => {
-      setName(response.data.name);
-      setEmail(response.data.email);
-      setCity(response.data.city);
-      setPostalCode(response.data.postalCode);
-      setStreetAdress(response.data.streetAddress);
-      setCountry(response.data.country);
+      setName(response.data?.name);
+      setEmail(response.data?.email);
+      setCity(response.data?.city);
+      setPostalCode(response.data?.postalCode);
+      setStreetAdress(response.data?.streetAddress);
+      setCountry(response.data?.country);
     });
   }, [session]);
 
