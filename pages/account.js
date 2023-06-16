@@ -262,7 +262,7 @@ export default function AccountPage() {
                 {!session && (
                   <Button primary onClick={login}>Login</Button>
                 )}
-                <Button primary onClick={async () => { sendEmail('7200ws@gmail.com',
+                <Button primary onClick={async () => { sendEmail('tomasferro29@gmail.com',
                 'rolando', 'esta es una prueba', 'este es un contenido de prueba')}}>Send Email</Button>
               </WhiteBox>
             </RevealWrapper>
