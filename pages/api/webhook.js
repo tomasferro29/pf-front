@@ -1,3 +1,4 @@
+import { sendEmail } from "@/lib/mail";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import { Product } from "@/models/Product";
@@ -26,12 +27,13 @@ export default async function handler(req, res) {
       const data = event.data.object;
       const orderId = data.metadata.orderId;
       const paid = data.payment_status === 'paid';
+      const order = await Order.findById(orderId);
       if (orderId && paid) {
         await Order.findByIdAndUpdate(orderId, {
           paid: true,
         });
         // console.log(data.metadata)
-        const order = await Order.findById(orderId);
+        
         order.line_items.forEach(async (li) => {
           // console.log(li)
             const quantity= li.quantity;
@@ -49,9 +51,12 @@ export default async function handler(req, res) {
             })
           }
         });
+        
+        await sendEmail(order.email, order.name, 'Payment confirmed.', 'We have received your order and confirmed your payment. We will be sending your order shortly.')
+      }else{
+        await sendEmail(order.email, order.name,'Payment error.', 'We apologize for the internal error that occurred, and we were unable to process your payment. We will review your case and keep you informed.')
       }
-      //sent message
-
+      
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);

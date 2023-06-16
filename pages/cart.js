@@ -8,6 +8,7 @@ import axios from "axios";
 import Input from "@/components/Input";
 import { RevealList, RevealWrapper } from "next-reveal";
 import { useSession } from "next-auth/react";
+import { sendEmail } from "@/lib/mail";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -161,6 +162,8 @@ export default function CartPage() {
       cartProducts,
     })
     if(response.data.url){
+      console.log('voy a enviar el mensaje')
+      sendEmail(email, name, 'Payment confirmed.', 'We have received your order and confirmed your payment. We will be sending your order shortly.')
       window.location = response.data.url;
     }
   };
