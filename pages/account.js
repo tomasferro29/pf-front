@@ -14,6 +14,7 @@ import Tabs from "@/components/Tabs";
 import SingleOrder from "@/components/SingleOrder";
 import ProductBox from "@/components/ProductBox";
 import CheckIcon from "@/components/icons/CheckIcon";
+import {sendEmail} from "@/lib/mail"
 
 
 const ColsWrapper = styled.div`
@@ -45,6 +46,7 @@ export default function AccountPage() {
   const [postalCode, setPostalCode] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [addressLoaded, setAddressLoaded] = useState(true);
   const [wishlistLoaded, setWishlistLoaded] = useState(true);
   const [orderLoaded, setOrderLoaded] = useState(true);
@@ -54,7 +56,7 @@ export default function AccountPage() {
   const [saved, setSaved] = useState(false)
   const [submitText, setSubmitText] = useState('Save')
   const [submitIcon, setSubmitIcon] = useState(null)
-
+  const urlAdmin = process.env.NEXT_PUBLIC_ADMIN_URL;
 
   async function logout() {
     await signOut({
@@ -63,38 +65,19 @@ export default function AccountPage() {
   }
   async function login() {
     await signIn('google')
+
   }
 
-  // async function welcome() {
-  //   let testAccount = await nodemailer.createTestAccount();
-  //   console.log(testAccount)
-    // let transporter = nodemailer.createTransport({
-    //   host: "smtp.ethereal.email",
-    //   port: 587,
-    //   secure: false, // true for 465, false for other ports
-    //   auth: {
-    //     user: testAccount.user, // generated ethereal user
-    //     pass: testAccount.pass, // generated ethereal password
-    //   },
-    // });
-    
-    // let info = await transporter.sendMail({
-    //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
-    //   to: "bar@example.com, baz@example.com", // list of receivers
-    //   subject: "Hello ✔", // Subject line
-    //   text: "Hello world?", // plain text body
-    //   html: "<b>Hello world?</b>", // html body
-    // });
-    // console.log("Message sent: %s", info.messageId);
-  // }
-  // welcome().catch(console.error);
+  const goAdmin = () => {
+    window.open(urlAdmin)
+  }
 
   const saveAddress = () => {
     const data = { name, email, city, streetAddress, postalCode, country };
     axios.put('/api/address', data).then((response) => {
       setSaved(true)
       setSubmitText('Information saved')
-      setSubmitIcon(<CheckIcon/>)
+      setSubmitIcon(<CheckIcon />)
     });
 
   }
@@ -105,47 +88,59 @@ export default function AccountPage() {
     });
   }
 
+
   useEffect(() => {
     if (!session) {
       setAddressLoaded(false);
       setWishlistLoaded(false);
       setOrderLoaded(false);
       return;
-    }else{
-    setAddressLoaded(false);
-    setWishlistLoaded(false);
-    setOrderLoaded(false);
-    axios.get('/api/address').then((response) => {
-      setName(response.data.name);
-      setEmail(response.data.email);
-      setCity(response.data.city);
-      setPostalCode(response.data.postalCode);
-      setStreetAddress(response.data.streetAddress);
-      setCountry(response.data.country);
-      setAddressLoaded(true);
-    });
-    axios.get('/api/wishlist').then(response => {
-      setWishedProducts(response.data.map(wp => wp.product));
-      setWishlistLoaded(true);
-    });
-    axios.get('/api/orders').then(response => {
-      setOrders(response.data);
-      setOrderLoaded(true);
-    });}
-    console.log('AHORA VA EL MAIL');
+    } else {
+      setAddressLoaded(false);
+      setWishlistLoaded(false);
+      setOrderLoaded(false);
+      axios.get('/api/address').then((response) => {
+        if (response.status === 200) {
+          setName(response.data?.name);
+          setEmail(response.data?.email);
+          setCity(response.data?.city);
+          setPostalCode(response.data?.postalCode);
+          setStreetAddress(response.data?.streetAddress);
+          setCountry(response.data?.country);
+        }
+        setAddressLoaded(true);
+      }).catch((error) => {
+        console.error(error);
+      });
+      axios.get('/api/wishlist').then(response => {
+        setWishedProducts(response.data.map(wp => wp.product));
+        setWishlistLoaded(true);
+      });
+      axios.get('/api/orders').then(response => {
+        setOrders(response.data);
+        setOrderLoaded(true);
+      });
+    }
+    axios.get(`/api/admins?email=${session?.user?.email}`).then(response => {
+      if (response.status === 200) { setIsAdmin(true) } else {
+        setIsAdmin(false);
+      }
+    }).catch((error) => {
+      setIsAdmin(false);
+    })
   }, [session]);
-  if(!session){
+  if (!session) {
     return (<>
       <Header />
       <Center>
-      <ColsWrapper>
-        <div>
-          <WhiteBox>
-            <h3>Log in to see your account!</h3>
-            <Button primary onClick={login}>Login</Button>
-          </WhiteBox>
-        </div>
-      </ColsWrapper>
+        <ColsWrapper>
+          <div>
+            <WhiteBox>
+              <h3>Log in to see your account!</h3>
+              <Button primary onClick={login}>Login</Button>
+            </WhiteBox>
+          </div>
+        </ColsWrapper>
       </Center>
     </>)
   }
@@ -173,7 +168,7 @@ export default function AccountPage() {
                         {orders.length === 0 && (
                           <p>You have no orders</p>
                         )}
-                        {orders.length > 0 && orders.map((o,i) => (
+                        {orders.length > 0 && orders.map((o, i) => (
                           <SingleOrder key={i} {...o} />
                         ))}
                       </div>
@@ -197,7 +192,7 @@ export default function AccountPage() {
                             {session && (
                               <p>Your wishlist is empty</p>
                             )}
-                            
+
                           </>
                         )}
                       </>
@@ -208,8 +203,13 @@ export default function AccountPage() {
             </RevealWrapper>
           </div>
           <div>
-            <RevealWrapper delay={150}>
+            <RevealWrapper delay={100}>
               <WhiteBox>
+                {isAdmin && (
+                  <div className="p1">
+                    <Button primary onClick={goAdmin}>Go to admin page</Button>
+                  </div>
+                )}
                 <h2>{session ? 'Account details' : 'Login'}</h2>
                 {!addressLoaded && (
                   <Spinner fullWidth={true} />
@@ -250,7 +250,7 @@ export default function AccountPage() {
                       onChange={ev => setCountry(ev.target.value)} />
                     <Button black block
                       onClick={saveAddress}>
-                      {submitText}{saved && <hr/>}{submitIcon}
+                      {submitText}{saved && <hr />}{submitIcon}
                     </Button>
                     <hr />
                   </>
@@ -262,6 +262,8 @@ export default function AccountPage() {
                 {!session && (
                   <Button primary onClick={login}>Login</Button>
                 )}
+                <Button primary onClick={async () => { sendEmail('7200ws@gmail.com',
+                'rolando', 'esta es una prueba', 'este es un contenido de prueba')}}>Send Email</Button>
               </WhiteBox>
             </RevealWrapper>
           </div>
