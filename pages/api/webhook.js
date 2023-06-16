@@ -40,7 +40,7 @@ export default async function handler(req, res) {
             // console.log(product)  
             const nstock =product.stock-quantity
             if(nstock<0){
-              //sent message
+              //sent message 
             }else{
             await Product.findByIdAndUpdate(productId, {
                 stock: nstock
